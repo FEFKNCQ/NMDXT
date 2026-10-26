@@ -47,8 +47,8 @@ class SalaryWidget:
         self.number_font = "Consolas" if os.name == "nt" else "DejaVu Sans Mono"
         self.setup_style()
         self.build_card()
-        self.root.bind("<Escape>", lambda event: self.quit())
-        self.root.protocol("WM_DELETE_WINDOW", self.quit)
+        self.root.bind("<Escape>", lambda event: self.hide_to_tray())
+        self.root.protocol("WM_DELETE_WINDOW", self.hide_to_tray)
         self.root.bind("<Map>", self.on_map, add="+")
         self.root.bind("<Destroy>", self.on_destroy, add="+")
         self.chrome = window_chrome
@@ -128,7 +128,7 @@ class SalaryWidget:
         self.control(280, "设置", self.settings, width=42)
         self.control(330, "−", self.minimize, width=22)
         self.control(360, "▾", self.hide_to_tray, width=22)
-        self.control(390, "×", self.quit, width=22)
+        self.control(390, "×", self.hide_to_tray, width=22)
         canvas.bind("<ButtonPress-1>", self.drag_start)
         canvas.bind("<B1-Motion>", self.drag)
 

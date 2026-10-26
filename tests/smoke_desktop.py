@@ -76,6 +76,26 @@ try:
         assert migrated["opacity"] == 90 and migrated["minimize_to_tray"]
         app = m.SalaryWidget()
         pump_until(lambda: app.tray.ready)
+        # Closing never terminates the counter, even with taskbar-only minimize.
+        app.config["minimize_to_tray"] = False
+        close = next(w for w in app.controls if w.cget("text") == "×")
+        close.event_generate("<Button-1>")
+        pump_until(lambda: app.hidden_to_tray)
+        assert not app.closed
+        app.show()
+        app.root.update()
+        app.root.tk.call(app.root.protocol("WM_DELETE_WINDOW"))
+        pump_until(lambda: app.hidden_to_tray)
+        assert not app.closed
+        app.show()
+        app.root.update()
+        app.root.focus_force()
+        app.root.event_generate("<Escape>")
+        pump_until(lambda: app.hidden_to_tray)
+        assert not app.closed
+        app.show()
+        app.root.update()
+        app.config["minimize_to_tray"] = True
         # The taskbar reads the WM's actual icon property, not the tray icon.
         properties = subprocess.check_output(
             ["xprop", "-name", app.root.title(), "_NET_WM_ICON", "WM_CLASS"],
