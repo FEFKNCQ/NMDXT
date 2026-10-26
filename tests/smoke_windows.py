@@ -55,6 +55,12 @@ user.FindWindowW.argtypes = [W.LPCWSTR, W.LPCWSTR]
 user.FindWindowW.restype = W.HWND
 user.keybd_event.argtypes = [W.BYTE, W.BYTE, W.DWORD, C.c_size_t]
 hwnd = user.GetParent(a.root.winfo_id())
+area = W.RECT()
+assert user.SystemParametersInfoW(0x0030, 0, C.byref(area), 0)
+assert (a.root.winfo_x(), a.root.winfo_y()) == (
+    max(area.left, area.right - 440),
+    max(area.top, area.bottom - 306),
+), a.root.geometry()
 user.SendMessageW.argtypes = [W.HWND, W.UINT, W.WPARAM, W.LPARAM]
 user.SendMessageW.restype = W.LPARAM
 assert user.SendMessageW(hwnd, 0x007F, 0, 0), "missing small taskbar icon"

@@ -4,6 +4,87 @@ import ctypes.util
 import os
 
 
+def work_area(root):
+    """Return desktop bounds excluding panels, with a screen-size fallback."""
+    fallback = (0, 0, root.winfo_screenwidth(), root.winfo_screenheight())
+    if os.name == "nt":
+        from ctypes import wintypes as W
+
+        rect = W.RECT()
+        user = C.WinDLL("user32", use_last_error=True)
+        if user.SystemParametersInfoW(0x0030, 0, C.byref(rect), 0):
+            return rect.left, rect.top, rect.right, rect.bottom
+        return fallback
+
+    x = C.CDLL(ctypes.util.find_library("X11") or "libX11.so.6")
+    pointer, atom = C.c_void_p, C.c_ulong
+    x.XOpenDisplay.argtypes = [C.c_char_p]
+    x.XOpenDisplay.restype = pointer
+    x.XDefaultRootWindow.argtypes = [pointer]
+    x.XDefaultRootWindow.restype = atom
+    x.XInternAtom.argtypes = [pointer, C.c_char_p, C.c_int]
+    x.XInternAtom.restype = atom
+    x.XGetWindowProperty.argtypes = [
+        pointer,
+        atom,
+        atom,
+        C.c_long,
+        C.c_long,
+        C.c_int,
+        atom,
+        C.POINTER(atom),
+        C.POINTER(C.c_int),
+        C.POINTER(atom),
+        C.POINTER(atom),
+        C.POINTER(pointer),
+    ]
+    x.XFree.argtypes = [pointer]
+    x.XCloseDisplay.argtypes = [pointer]
+    display = x.XOpenDisplay(None)
+    if not display:
+        return fallback
+
+    def property_values(name):
+        actual, count, remaining = atom(), atom(), atom()
+        fmt, data = C.c_int(), pointer()
+        key = x.XInternAtom(display, name, True)
+        if not key:
+            return []
+        try:
+            result = x.XGetWindowProperty(
+                display,
+                x.XDefaultRootWindow(display),
+                key,
+                0,
+                4096,
+                False,
+                6,
+                C.byref(actual),
+                C.byref(fmt),
+                C.byref(count),
+                C.byref(remaining),
+                C.byref(data),
+            )
+            if result or actual.value != 6 or fmt.value != 32 or not data:
+                return []
+            return list(C.cast(data, C.POINTER(atom))[: count.value])
+        finally:
+            if data:
+                x.XFree(data)
+
+    try:
+        desktop = property_values(b"_NET_CURRENT_DESKTOP") or [0]
+        areas = property_values(b"_NET_WORKAREA")
+        offset = desktop[0] * 4
+        if offset + 4 <= len(areas):
+            left, top, width, height = areas[offset : offset + 4]
+            if width > 0 and height > 0:
+                return left, top, left + width, top + height
+        return fallback
+    finally:
+        x.XCloseDisplay(display)
+
+
 def undecorate(root):
     root.update_idletasks()
     if os.name == "nt":

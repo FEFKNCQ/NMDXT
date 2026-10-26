@@ -54,6 +54,10 @@ class SalaryWidget:
         self.chrome = window_chrome
         self.refresh_chrome()
         self.apply_opacity(self.config["opacity"])
+        left, top, right, bottom = window_chrome.work_area(self.root)
+        x = max(left, right - 420 - 20)
+        y = max(top, bottom - 286 - 20)
+        self.root.geometry(f"420x286+{x}+{y}")
         self.root.deiconify()
         if os.name == "nt":
             icon = Path(__file__).parent / "assets/icon.ico"
