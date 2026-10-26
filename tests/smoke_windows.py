@@ -68,6 +68,12 @@ assert user.SendMessageW(hwnd, 0x007F, 1, 0), "missing large taskbar icon"
 assert not user.GetWindowLongW(hwnd, -16) & 0x00C00000, "caption reappeared"
 assert user.GetWindowLongW(hwnd, -20) & 0x40000, "missing taskbar app window style"
 a.config["minimize_to_tray"] = False
+# WM_CLOSE must hide instead of terminating, independently of minimize settings.
+user.PostMessageW(hwnd, 0x0010, 0, 0)
+pump_until(lambda: a.hidden_to_tray and a.root.state() == "withdrawn")
+assert not a.closed
+a.show()
+pump_until(lambda: a.root.winfo_ismapped())
 for _ in range(3):
     a.minimize()
     pump_until(lambda: a.root.state() == "iconic" and user.IsIconic(hwnd))
