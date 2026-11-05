@@ -1,10 +1,8 @@
-# 薪动 · 上班鼓励器
+##牛马的薪跳 NMDXT
 
 一个轻巧的桌面悬浮工资计数器。让时间变成看得见的收入。
 
-[下载安装包](https://github.com/WizzenH/xindong/releases/latest) · [使用说明](docs/usage.md) · [源码结构](docs/architecture.md) · [构建说明](docs/building.md) · [更新日志](CHANGELOG.md)
 
-![八套配色](docs/screenshots/palettes.png)
 
 ## 功能
 
