@@ -60,5 +60,5 @@ jobs:
             "dist/xindong-$RELEASE_VERSION-source.zip" \
             dist/SHA256SUMS \
             --target "$GITHUB_SHA" \
-            --title "薪动 v$RELEASE_VERSION" \
+            --title "牛马的薪跳 v$RELEASE_VERSION" \
             --notes-file "docs/releases/v$RELEASE_VERSION.md"

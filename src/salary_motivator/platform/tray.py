@@ -251,7 +251,7 @@ class Tray:
                 notify.size, notify.hwnd, notify.id = C.sizeof(notify), self.hwnd, 1
                 notify.flags, notify.message = 7, 0x8001
                 notify.icon = own_icon or user.LoadIconW(None, C.c_void_p(32512))
-                notify.tip = "薪动 · 上班鼓励器 — 点击显示，右键菜单"
+                notify.tip = "牛马的薪跳 · 上班鼓励器 — 点击显示，右键菜单"
                 register()
                 if self.closed:
                     user.DestroyWindow(self.hwnd)
@@ -344,7 +344,7 @@ def linux_helper():
     if indicator is None:
         status = Gtk.StatusIcon.new_from_file(str(icon))
         status.set_title("上班鼓励器")
-        status.set_tooltip_text("薪动 · 点击显示，右键打开菜单")
+        status.set_tooltip_text("牛马的薪跳 · 点击显示，右键打开菜单")
         status.connect("activate", lambda widget: send("show"))
         status.connect(
             "popup-menu",

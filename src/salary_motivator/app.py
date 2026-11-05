@@ -81,7 +81,7 @@ class SalaryWidget:
         canvas.create_oval(
             23, 24, 29, 30, fill=self.theme.accent, outline="", tags=("fill:accent",)
         )
-        self.label(38, 27, "薪动 · PAYDAY", size=10, weight="bold")
+        self.label(38, 27, "牛马的薪跳 · PAYDAY", size=10, weight="bold")
         self.label(24, 69, "今日累计收入", color="muted")
         self.money_id = self.label(
             22, 113, "", size=34, color="money", weight="bold", numeric=True

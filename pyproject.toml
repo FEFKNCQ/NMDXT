@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "salary-motivator"
 dynamic = ["version"]
-description = "薪动 · 可置顶、可收进托盘的每日工资计数器"
+description = "牛马的薪跳 · 可置顶、可收进托盘的每日工资计数器"
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
