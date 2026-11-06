@@ -1,3 +1,12 @@
+> **下载说明**
+> 优先推荐从百度网盘下载（含完整 release 文件，可用提取码获取），无需访问 GitHub：
+> **百度网盘**：https://pan.baidu.com/s/1by0yMmqrzmY_dXnnH8ENHA?pwd=kutm
+>
+> **夸克网盘**：https://pan.quark.cn/s/3cae2e5fbea4
+>
+> 也可在 [本仓库 Releases](https://github.com/FEFKNCQ/NMDXT/releases) 下载。
+
+
 # 牛马的薪跳 （上班鼓励器）
 
 > 一个桌面悬浮小窗 + 安卓桌面小组件，实时显示你今天已经赚到的钱、每秒进账、工龄，以及距离下班 / 退休还有多久。全部数据在本机计算，不联网、不上传。
